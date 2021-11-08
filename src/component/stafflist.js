@@ -1,34 +1,60 @@
 import React, { useState } from "react";
-import { STAFFS } from "../shared/staffs";
+import { STAFFS, DEPARTMENTS } from "../shared/staffs";
+import dateFormat from "dateformat";
 
-const staffs = STAFFS;
+// const staffs_a = STAFFS;
 
 function StaffList() {
-  const [Info, setInfo] = useState(0);
-  const HandleInfo = () => (
-      setInfo(Info+1)
-  )
+  const [SelectedStaff, setSelectedStaff] = useState({});
+  const [staffs] = useState(STAFFS);
+
+  const handleClick = (staffInfo) => {
+    setSelectedStaff(staffInfo);
+  };
+
   const List = () =>
-    staffs.map((nhanVien) => (
+    staffs.map((staff) => (
       <td
-        onClick={HandleInfo}
-        className=" fw-bolder col-sm-12 col-md-6 col-lg-4 border-radius"
-        key={nhanVien.id}
+        className="fw-bolder col-sm-12 col-md-6 col-lg-4 border-radisus"
+        key={staff.id}
       >
-        {nhanVien.name}
+        <div onClick={() => handleClick(staff)}>{staff.name}</div>
       </td>
     ));
+
+  const StaffInfo = () => (
+    <div>
+      <h2>Họ và tên: {SelectedStaff.name}</h2>
+      <p>
+        Ngày sinh:
+        {dateFormat(SelectedStaff.doB, "dd/mm/yyyy")}
+        <br />
+        Ngày vào công ty: 
+        {dateFormat(SelectedStaff.startDate, "dd/mm/yyyy")}
+        <br />
+        Phòng ban:
+        {/* {SelectedStaff.department} */}
+        <br />
+        Số ngày nghỉ còn lại: 
+        {SelectedStaff.annualLeave}
+        <br />
+        Số ngày đã làm thêm: 
+        {SelectedStaff.overTime}
+        <br />
+      </p>
+    </div>
+  );
 
   return (
     <div className="container-fluid">
       <table>
         <tbody>
-          <tr class="row">
+          <tr className="row">
             <List />
           </tr>
         </tbody>
       </table>
-      <p>{Info}</p>
+      <StaffInfo />
     </div>
   );
 }
