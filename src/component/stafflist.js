@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { STAFFS, DEPARTMENTS } from "../shared/staffs";
+import { STAFFS } from "../shared/staffs";
 import dateFormat from "dateformat";
 
-// const staffs_a = STAFFS;
-
 function StaffList() {
-  const [SelectedStaff, setSelectedStaff] = useState({});
+  const [SelectedStaff, setSelectedStaff] = useState(false);
   const [staffs] = useState(STAFFS);
 
   const handleClick = (staffInfo) => {
@@ -22,28 +20,35 @@ function StaffList() {
       </td>
     ));
 
-  const StaffInfo = () => (
-    <div>
-      <h2>Họ và tên: {SelectedStaff.name}</h2>
-      <p>
-        Ngày sinh:
-        {dateFormat(SelectedStaff.doB, "dd/mm/yyyy")}
-        <br />
-        Ngày vào công ty: 
-        {dateFormat(SelectedStaff.startDate, "dd/mm/yyyy")}
-        <br />
-        Phòng ban:
-        {/* {SelectedStaff.department} */}
-        <br />
-        Số ngày nghỉ còn lại: 
-        {SelectedStaff.annualLeave}
-        <br />
-        Số ngày đã làm thêm: 
-        {SelectedStaff.overTime}
-        <br />
-      </p>
-    </div>
-  );
+  function Info({ params }) {
+    if (!params) {
+      return <p>Nhấn vào tên nhân viên để hiển thị thông tin</p>;
+    } else {
+      return (
+        <div>
+          <h2>Họ và tên: {params.name}</h2>
+          <img src={params.image} />
+          <p>
+            Ngày sinh: <span> </span>
+            {dateFormat(params.doB, "dd/mm/yyyy")}
+            <br />
+            Ngày vào công ty: <span> </span>
+            {dateFormat(params.startDate, "dd/mm/yyyy")}
+            <br />
+            Phòng ban: <span> </span>
+            {params.department.name}
+            <br />
+            Số ngày nghỉ còn lại: <span> </span>
+            {SelectedStaff.annualLeave}
+            <br />
+            Số ngày đã làm thêm: <span> </span>
+            {SelectedStaff.overTime}
+            <br />
+          </p>
+        </div>
+      );
+    }
+  }
 
   return (
     <div className="container-fluid">
@@ -54,7 +59,7 @@ function StaffList() {
           </tr>
         </tbody>
       </table>
-      <StaffInfo />
+      <Info params={SelectedStaff} />
     </div>
   );
 }
